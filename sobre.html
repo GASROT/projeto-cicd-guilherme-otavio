@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre os Desenvolvedores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar container">
+            <div class="logo">DevProfiles</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="sobre.html" class="active">Sobre</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2>Desenvolvedores</h2>
+            <div class="features-grid" id="profiles-container">
+                <!-- Conteúdo gerado via JS -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Projeto CI/CD - Desenvolvedores</p>
+    </footer>
+
+    <script>
+        const users = ['GASROT', 'otaviocolimo'];
+        const container = document.getElementById('profiles-container');
+
+        async function fetchGitHubProfiles() {
+            try {
+                for (const user of users) {
+                    const response = await fetch(`https://api.github.com/users/${user}`);
+                    const data = await response.json();
+                    
+                    const card = document.createElement('div');
+                    card.className = 'feature-card';
+                    card.innerHTML = `
+                        <img src="${data.avatar_url}" alt="Avatar" style="width: 120px; border-radius: 50%; margin-bottom: 1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        <h3>${data.name || data.login}</h3>
+                        <p style="min-height: 48px;">${data.bio || 'Sem biografia disponível.'}</p>
+                        <div style="margin: 1.5rem 0;">
+                            <p><strong>Repositórios:</strong> ${data.public_repos}</p>
+                            <p><strong>Seguidores:</strong> ${data.followers}</p>
+                        </div>
+                        <a href="${data.html_url}" target="_blank" class="cta-button" style="text-decoration: none; display: inline-block;">Ver Perfil</a>
+                    `;
+                    container.appendChild(card);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                container.innerHTML = '<p>Erro ao carregar os perfis do GitHub.</p>';
+            }
+        }
+
+        fetchGitHubProfiles();
+    </script>
+</body>
+</html>
